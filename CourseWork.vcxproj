@@ -143,8 +143,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClass.h" />
-    <ClInclude Include="Directions.h" />
+    <ClInclude Include="BlueGhost.h" />
+    <ClInclude Include="Constant.h" />
     <ClInclude Include="Coords.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="OrangeGhost.h" />
+    <ClInclude Include="PinkGhost.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="RedGhost.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

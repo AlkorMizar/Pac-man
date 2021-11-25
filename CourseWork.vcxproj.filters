@@ -19,6 +19,9 @@
     <Filter Include="Файлы заголовков\EntityHeader">
       <UniqueIdentifier>{004a8aaf-9d2e-49f1-9f0e-bca62372fd64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\EntityHeader\Ghosts">
+      <UniqueIdentifier>{adefe53b-ec84-4be9-be36-24a43da078b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CourseWork.cpp">
@@ -32,8 +35,26 @@
     <ClInclude Include="Coords.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Directions.h">
+    <ClInclude Include="Constant.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Файлы заголовков\EntityHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Файлы заголовков\EntityHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="RedGhost.h">
+      <Filter>Файлы заголовков\EntityHeader\Ghosts</Filter>
+    </ClInclude>
+    <ClInclude Include="PinkGhost.h">
+      <Filter>Файлы заголовков\EntityHeader\Ghosts</Filter>
+    </ClInclude>
+    <ClInclude Include="BlueGhost.h">
+      <Filter>Файлы заголовков\EntityHeader\Ghosts</Filter>
+    </ClInclude>
+    <ClInclude Include="OrangeGhost.h">
+      <Filter>Файлы заголовков\EntityHeader\Ghosts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
