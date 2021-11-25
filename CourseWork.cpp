@@ -1,5 +1,7 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
+#define WM_SYSCOMMAND  
+
 #include <windows.h>
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -50,8 +52,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return 0;
     }
 
+
+    ::SetWindowLong(hWnd, GWL_STYLE, GetWindowLong(hWnd, GWL_STYLE) & ~WS_SIZEBOX);
+    ::SetWindowLong(hWnd, GWL_STYLE, GetWindowLong(hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX);
+
     // Показываем наше окно
-    ShowWindow(hWnd, nCmdShow);
+    ShowWindow(hWnd, SW_SHOWMAXIMIZED);
     UpdateWindow(hWnd);
 
     // Выполняем цикл обработки сообщений до закрытия приложения
@@ -110,7 +116,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
-
+    
     default:
         return (DefWindowProc(hWnd, messg, wParam, lParam));
     }

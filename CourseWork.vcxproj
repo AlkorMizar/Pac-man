@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CourseWork.cpp" />
+    <ClCompile Include="MazeCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClass.h" />
@@ -147,6 +148,9 @@
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Coords.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FrameRander.h" />
+    <ClInclude Include="GameCore.h" />
+    <ClInclude Include="MazeCreator.h" />
     <ClInclude Include="OrangeGhost.h" />
     <ClInclude Include="PinkGhost.h" />
     <ClInclude Include="Player.h" />
