@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include "Constant.h"
 #include "MazeCreator.h"
 
 using namespace maze;
@@ -169,6 +169,16 @@ void maze::MazeCreator::deleteTwists(int i1) {
 	}
 }
 
+void maze::MazeCreator::createTonnel() {
+	int tonnelRow = mazeRows / 2;
+	if (!maze[tonnelRow][1] || !maze[tonnelRow][mazeColums - 1]) {
+		tonnelRow--;
+		if (!maze[tonnelRow][1] || !maze[tonnelRow][mazeColums - 1]) {
+			tonnelRow += 2;
+		}
+	}
+	maze[tonnelRow][0] = maze[tonnelRow][mazeColums] = ObjID::PATH | ObjID::TONNEL;
+}
 
 TwoDimArr maze::MazeCreator::generateMap(MazeContext context)
 {
@@ -185,5 +195,6 @@ TwoDimArr maze::MazeCreator::generateMap(MazeContext context)
 	goInAllDirections(Cell{ r,c });
 	deleteDeadEnds();
 	deleteTwists(context.dificulty);
+	createTonnel();
 	return maze;
 }

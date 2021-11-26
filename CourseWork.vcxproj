@@ -139,8 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BlueGhost.cpp" />
     <ClCompile Include="CourseWork.cpp" />
+    <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="MazeCreator.cpp" />
+    <ClCompile Include="OrangeGhost.cpp" />
+    <ClCompile Include="PinkGhost.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RedGhost.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClass.h" />
@@ -155,6 +161,17 @@
     <ClInclude Include="PinkGhost.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RedGhost.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="blue.bmp" />
+    <Image Include="cherry.bmp" />
+    <Image Include="coin.bmp" />
+    <Image Include="orange.bmp" />
+    <Image Include="pinky.bmp" />
+    <Image Include="player.bmp" />
+    <Image Include="red.bmp" />
+    <Image Include="scatter.bmp" />
+    <Image Include="superCoin.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

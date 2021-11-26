@@ -30,6 +30,24 @@
     <ClCompile Include="MazeCreator.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="GameCore.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="BlueGhost.cpp">
+      <Filter>Исходные файлы\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="PinkGhost.cpp">
+      <Filter>Исходные файлы\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="OrangeGhost.cpp">
+      <Filter>Исходные файлы\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="RedGhost.cpp">
+      <Filter>Исходные файлы\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Исходные файлы\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClass.h">
@@ -68,5 +86,34 @@
     <ClInclude Include="MazeCreator.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="player.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="pinky.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="red.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="blue.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="cherry.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="orange.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="scatter.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="superCoin.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="coin.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
 </Project>

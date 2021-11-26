@@ -8,7 +8,7 @@ class BlueGhost:Enemy
 public:
 	BlueGhost();
 	~BlueGhost();
-
+	void setCurrentTile(Coords newTile, Coords playerTile);
 private:
 
 };

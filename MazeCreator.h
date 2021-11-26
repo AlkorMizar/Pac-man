@@ -64,7 +64,6 @@ namespace maze {
 		void goInAllDirections(Cell);
 		std::vector<int> generateRandomDirections();
 		void goInCells(bool isExist, Cell, Cell);
-		void goInAllDirections(Cell);
 		void function(CellArray&, Cell, bool condition);
 		CellArray getWallsAround(Cell);
 		void deleteDeadEnds();
@@ -73,5 +72,6 @@ namespace maze {
 		smallArray getWallsOnDelete(Cell);
 		int deleteTwist(smallArray wallsOnDelete, Cell, int count);
 		void deleteTwists(int i1);
+		void createTonnel();
 	};
 }

@@ -6,7 +6,7 @@
 class Enemy :Entity
 {
 public:
-	virtual void setCurrentTile(Coords newTile, Coords playerTile);
+	virtual void setCurrentTile(Coords newTile, Coords playerTile) {}
 protected:
 	EnemyStateEnum state;
 	Coords homeCoord;
