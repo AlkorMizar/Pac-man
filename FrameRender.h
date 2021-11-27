@@ -42,14 +42,15 @@ public:
 	bool renderNextFrame();
 	void renderButton(HDC hdc);
 	void renderText();
-	
-	Sprite menu, map, player, coin, superCoin, cherry, blue, red, pink, orange, scatter;
+	void reloadMap() { createMap(); }
+	Sprite mapTraced, map, player, coin, superCoin, cherry, blue, red, pink, orange, scatter;
 
 private:
 	void createMap();
 	void rednderPlayerInfo();
 	void renderObjects();
 	void loadBMP();
+	//void drawLine(int i, int j, bool isVertical, int side);
 	GameContext& currentGameContext;
 	HFONT hFont;
 	HWND hWnd;

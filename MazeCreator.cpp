@@ -35,6 +35,13 @@ void maze::MazeCreator::goInCells(bool isExist, Cell one, Cell two) {
 
 void maze::MazeCreator::generateEmptyMaze()
 {
+	for (int i = 1; i < mazeRows; i++)
+	{
+		for (int j = 1; j < mazeColums; j++)
+		{
+			maze[i][j] = ObjID::PATH;
+		}
+	}
 }
 
 void maze::MazeCreator::goInAllDirections(Cell cell) {
@@ -185,7 +192,7 @@ TwoDimArr maze::MazeCreator::generateMap(MazeContext context)
 	mazeColums = context.mazeColums;
 
 	maze = TwoDimArr(mazeRows + 1, std::vector<int>(mazeColums + 1));
-	if (context.seed == 0) {
+	if (context.seed != 0) {
 		srand(context.seed);
 		int r = rand() % mazeRows % 2 * 2 + 1;
 		int c = rand() % mazeColums % 2 * 2 + 1;
@@ -204,11 +211,5 @@ TwoDimArr maze::MazeCreator::generateMap(MazeContext context)
 
 maze::MazeCreator::MazeCreator::~MazeCreator()
 {
-	for (int i = 1; i < mazeRows; i++)
-	{
-		for (int j = 1; j < mazeColums; j++)
-		{
-			maze[i][j] = ObjID::PATH;
-		}
-	}
+	
 }

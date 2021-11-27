@@ -75,7 +75,6 @@ int GameCore::play()
     currentGameContext = GameContext();
 
     frameRender =new FrameRender(hWnd,hInstance,currentGameContext);
-
     // Показываем наше окно
     ShowWindow(hWnd, SW_SHOWMAXIMIZED);
     UpdateWindow(hWnd);
@@ -98,7 +97,7 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
     RECT Rect;
     HDC hdc, hCmpDC;
     HBITMAP hBmp;
-
+    HDC mainDC;
     switch (messg)
     {
     case WM_DRAWITEM:
@@ -119,101 +118,12 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
         }
         return 0;
     }
-    case WM_PAINT:
+    case WM_PAINT: {
         GetClientRect(hWnd, &Rect);
-        hdc = BeginPaint(hWnd, &ps);
-
-        // Создание теневогоs контекста для двойной буфферизации
-        hCmpDC = CreateCompatibleDC(hdc);
-        hBmp = CreateCompatibleBitmap(hdc, Rect.right - Rect.left,
-            Rect.bottom - Rect.top);
-        SelectObject(hCmpDC, hBmp);
-
-        // Закраска фоновым цветом
-        LOGBRUSH br;
-        br.lbStyle = BS_SOLID;
-        br.lbColor = 0x0;
-        HBRUSH brush;
-        brush = CreateBrushIndirect(&br);
-        FillRect(hCmpDC, &Rect, brush);
-        DeleteObject(brush);
-
-        // Здесь рисуем на контексте hCmpDC
-
-        // Копируем изображение из теневого контекста на экран
-        SetStretchBltMode(hdc, COLORONCOLOR);
-        BitBlt(hdc, elementSize::COIN_WIDTH + 50, 0, Rect.right - Rect.left, Rect.bottom - Rect.top,
-            hCmpDC, 0, 0, SRCCOPY);
-
-        // Удаляем ненужные системные объекты
-        DeleteDC(hCmpDC);
-        DeleteObject(hBmp);
-        hCmpDC = NULL;
-#define t 27
-        // Создание теневогоs контекста для двойной буфферизации
-        hCmpDC = CreateCompatibleDC(hdc);
-        hBmp = CreateCompatibleBitmap(hdc, t-1,t-1);
-        SelectObject(hCmpDC, hBmp);
-
-        // Закраска фоновым цветом
-        
-        br.lbStyle = BS_SOLID;
-        br.lbColor = frameContext::BLUE_COLOR;
-        brush = CreateBrushIndirect(&br);
-        Rect.left = 0;
-        Rect.right = t;
-        Rect.top = 0;
-        Rect.bottom = t;
-
-        FillRect(hCmpDC, &Rect, brush);
-        DeleteObject(brush);
-        
-        BitBlt(hdc, 300,0 ,t, t,
-            hCmpDC, 0, 0, SRCCOPY);
-
-        for (size_t i = 0; i < 29; i++)
-        {
-            BitBlt(hdc, 300+8 , i * t , 9, t,
-                hCmpDC, 0, 0, SRCCOPY);
-        }
-        for (size_t i = 0; i < 29; i++)
-        {
-            BitBlt(hdc, 300 + i * t, t * 2+8, t,9,
-                hCmpDC, 0, 0, SRCCOPY);
-        }
-        for (size_t i = 0; i < 29; i++)
-        {
-            BitBlt(hdc, 300 + i * t , 8, t, 9,
-                hCmpDC, 0, 0, SRCCOPY);
-        }
-        // Копируем изображение из теневого контекста на экран
-        
-
-        // Удаляем ненужные системные объекты
-        DeleteDC(hCmpDC);
-        DeleteObject(hBmp);
-
-        {
-            
-            FrameRender render = FrameRender(hWnd, hInstance,currentGameContext);
-            auto sp = render.pink;
-            BitBlt(hdc, 300 + t + 14 - sp.width / 2, t + 14 - sp.height / 2, sp.width, sp.height,
-                sp.hdc, 0, 0, SRCCOPY);
-        }
-
-        /*
-        hBmp = (HBITMAP)LoadImage(hInstance, TEXT("superCoin.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-        if (hBmp == NULL) {
-            return false;
-        }
-        BITMAP bm;
-        GetObject(hBmp, sizeof(bm), &bm);
-        hCmpDC = CreateCompatibleDC(hdc);
-        SelectObject(hCmpDC, hBmp);
-        DeleteObject(hBmp);*/
+       
         EndPaint(hWnd, &ps);
         break;
-
+    }
     case WM_DESTROY:
         PostQuitMessage(0);
         break;

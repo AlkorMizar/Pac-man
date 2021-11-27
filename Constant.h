@@ -20,10 +20,11 @@ namespace frameContext {
 	const int FRAME_RATE = 41;
 	const int TILE_SIZE = 27,
 		TILE_CENTER = 27 / 2 + 1,
-		BORDER_LEFT = 300, 
-		BORDER_RIGHT = BORDER_LEFT+TILE_SIZE*mazeSize::ROWS_IN_MAZE,
-		MAZE_BORDER_FIRST_COORD = 9,
-		MAZE_BORDER_LEFT_COORD = 17;
+		BORDER_TOP = 0,
+		BORDER_BOTTOM = TILE_SIZE * (mazeSize::COLUMS_IN_MAZE+1),
+		BORDER_LEFT = 300,
+		BORDER_RIGHT = BORDER_LEFT + TILE_SIZE * (mazeSize::ROWS_IN_MAZE+1),
+		TILE_DELTA = TILE_SIZE/3;
 	const int BLUE_COLOR = RGB(0, 39, 255);
 	const int BLACK_COLOR = 0;	
 }
@@ -61,19 +62,20 @@ namespace elementSize {
 
 enum ObjID :int
 {
-	WALL       = 0b0,
-	PATH       = 0b1,
-	COIN       = 0b01,
-	SUPER_COIN = 0b001,
-	PAC_MAN    = 0b0001,
-	RED_GH     = 0b00001,
-	PINK_GH    = 0b000001,
-	BLUE_GH    = 0b0000001,
-	ORANGE_GH  = 0b00000001,
-	CHERRY     = 0b000000001,
-	MENU       = 0b0000000001,
-	TONNEL    = 0b00000000001
+	WALL       = 0,
+	PATH       = 1,
+	COIN       = PATH<<1,
+	SUPER_COIN = COIN<<1,
+	PAC_MAN    = SUPER_COIN<<1,
+	RED_GH     = PAC_MAN<<1,
+	PINK_GH    = RED_GH<<1,
+	BLUE_GH    = PINK_GH << 1,
+	ORANGE_GH  = BLUE_GH << 1,
+	CHERRY     = ORANGE_GH << 1,
+	MENU       = CHERRY << 1,
+	TONNEL     = MENU << 1
 };
+
 
 enum EnemyStateEnum {
 	CHASE, SCATTER, FRIGHTENED

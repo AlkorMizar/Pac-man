@@ -11,7 +11,8 @@ public:
 	Coords getOffset() { return offset; }
 	Coords getCurrentTile() { return currentTile; }
 	Coords getDirection() { return direction; }
-	ObjID getId() { return id; };
+	ObjID getId() { return id; }
+	bool isInGame;
 
 	virtual void setDirection(Coords) {}
 	virtual void setOffset(Coords) {}
@@ -22,4 +23,5 @@ protected:
 	Coords offset;//from current tile 
 	double speed;//perFrame
 	ObjID id;
+	
 };
