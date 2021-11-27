@@ -5,13 +5,9 @@
 
 #include <windows.h>
 
-#include "Player.h"
-#include "RedGhost.h"
-#include "BlueGhost.h"
-#include "PinkGhost.h"
-#include "OrangeGhost.h"
 #include "Constant.h"
 #include "MazeCreator.h"
+#include "GameContext.h"
 
 class GameCore
 {
@@ -22,13 +18,9 @@ public:
 	int play();
 	LRESULT Process(HWND, UINT, WPARAM, LPARAM);
 private:
+	void startNewGame();
+	GameContext currentGameContext;
 	HWND hWnd;
 	WNDCLASS wc;
 	HINSTANCE hInstance;
-
-	Player player;
-	RedGhost red;
-	PinkGhost pink;
-	BlueGhost blue;
-	OrangeGhost orange;
 };

@@ -1,4 +1,6 @@
 #include "GameCore.h"
+#include "FrameRender.h"
+
 #include <iostream>
 #include <string>
 
@@ -7,7 +9,6 @@
 using namespace std;
 GameCore::GameCore(HINSTANCE _hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow,WNDPROC wndProc)
 {
-    hInstance = _hInstance;
     // Заполняем структуру класса окна
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = wndProc;
@@ -62,6 +63,8 @@ int GameCore::play()
 
 
     ::SetWindowLong(hWnd, GWL_STYLE, GetWindowLong(hWnd, GWL_STYLE) & ~WS_SIZEBOX);
+
+    currentGameContext = GameContext();
 
     // Показываем наше окно
     ShowWindow(hWnd, SW_SHOWMAXIMIZED);
@@ -137,23 +140,6 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
         BitBlt(hdc, 300,0 ,t, t,
             hCmpDC, 0, 0, SRCCOPY);
 
-        // Здесь рисуем на контексте hCmpDC
-        /*for (size_t i = 0; i < 29; i++)
-        {
-            BitBlt(hdc, 300+8,  i * t+8,9, t,
-                hCmpDC, 0, 0, SRCCOPY);
-        }
-        for (size_t i = 0; i < 29; i++)
-        {
-            BitBlt(hdc, 300 + i * t+8, 8+t*2, t, 9,
-                hCmpDC, 0, 0, SRCCOPY);
-        }
-        for (size_t i = 0; i < 29; i++)
-        {
-            BitBlt(hdc, 300 + i * t+8, 8 , t, 9,
-                hCmpDC, 0, 0, SRCCOPY);
-        }*/
-
         for (size_t i = 0; i < 29; i++)
         {
             BitBlt(hdc, 300+8 , i * t , 9, t,
@@ -176,7 +162,16 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
         DeleteDC(hCmpDC);
         DeleteObject(hBmp);
 
-        hBmp = (HBITMAP)LoadImage(hInstance, TEXT("player.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+        {
+            
+            FrameRender render = FrameRender(hWnd, hInstance,currentGameContext);
+            auto sp = render.pink;
+            BitBlt(hdc, 300 + t + 14 - sp.width / 2, t + 14 - sp.height / 2, sp.width, sp.height,
+                sp.hdc, 0, 0, SRCCOPY);
+        }
+
+        /*
+        hBmp = (HBITMAP)LoadImage(hInstance, TEXT("superCoin.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
         if (hBmp == NULL) {
             return false;
         }
@@ -184,8 +179,10 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
         GetObject(hBmp, sizeof(bm), &bm);
         hCmpDC = CreateCompatibleDC(hdc);
         SelectObject(hCmpDC, hBmp);
-        BitBlt(hdc, 300 + t+14- bm.bmWidth/2, t+14- bm.bmHeight/2, bm.bmWidth, bm.bmHeight,
-            hCmpDC, 0, 0, SRCCOPY);
+        DeleteObject(hBmp);*/
+        
+
+
         EndPaint(hWnd, &ps);
         break;
 

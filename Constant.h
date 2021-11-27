@@ -11,6 +11,11 @@ namespace FrameRate {
 	const int FRAME_RATE = 41;
 }
 
+namespace mazeSize {
+	const int ROWS_IN_MAZE = 28;
+	const int COLUMS_IN_MAZE = 28;
+}
+
 enum ObjID :int
 {
 	WALL       = 0b0,

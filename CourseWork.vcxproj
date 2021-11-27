@@ -141,6 +141,8 @@
   <ItemGroup>
     <ClCompile Include="BlueGhost.cpp" />
     <ClCompile Include="CourseWork.cpp" />
+    <ClCompile Include="FrameRender.cpp" />
+    <ClCompile Include="GameContext.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="MazeCreator.cpp" />
     <ClCompile Include="OrangeGhost.cpp" />
@@ -154,7 +156,8 @@
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Coords.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="FrameRander.h" />
+    <ClInclude Include="FrameRender.h" />
+    <ClInclude Include="GameContext.h" />
     <ClInclude Include="GameCore.h" />
     <ClInclude Include="MazeCreator.h" />
     <ClInclude Include="OrangeGhost.h" />

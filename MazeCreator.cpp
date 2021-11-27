@@ -13,11 +13,6 @@ maze::MazeCreator::MazeCreator::MazeCreator()
 	map[BOTTOM_LEFT] = { {0,-1},{1,0},{-1,-1},{1,1} };
 }
 
-maze::MazeCreator::MazeCreator::~MazeCreator()
-{
-}
-
-
 std::vector<int> maze::MazeCreator::generateRandomDirections() {
 	std::vector<int> directions = { 1, 2, 3, 4 };
 	std::vector<int> randoms(4);
@@ -36,6 +31,10 @@ void maze::MazeCreator::goInCells(bool isExist, Cell one, Cell two) {
 		maze[one.row][one.colum] = true;
 		goInAllDirections(two);
 	}
+}
+
+void maze::MazeCreator::generateEmptyMaze()
+{
 }
 
 void maze::MazeCreator::goInAllDirections(Cell cell) {
@@ -184,17 +183,32 @@ TwoDimArr maze::MazeCreator::generateMap(MazeContext context)
 {
 	mazeRows = context.mazeRows;
 	mazeColums = context.mazeColums;
-	srand(context.seed);
 
 	maze = TwoDimArr(mazeRows + 1, std::vector<int>(mazeColums + 1));
-
-	int r = rand() % mazeRows % 2 * 2 + 1;
-	int c = rand() % mazeColums % 2 * 2 + 1;
-	maze[r][c] = 0;
-	//?Allocate the maze with recursive method
-	goInAllDirections(Cell{ r,c });
-	deleteDeadEnds();
-	deleteTwists(context.dificulty);
-	createTonnel();
+	if (context.seed == 0) {
+		srand(context.seed);
+		int r = rand() % mazeRows % 2 * 2 + 1;
+		int c = rand() % mazeColums % 2 * 2 + 1;
+		maze[r][c] = 0;
+		//?Allocate the maze with recursive method
+		goInAllDirections(Cell{ r,c });
+		deleteDeadEnds();
+		deleteTwists(context.dificulty);
+		createTonnel();
+	}
+	else {
+		generateEmptyMaze();
+	}	
 	return maze;
+}
+
+maze::MazeCreator::MazeCreator::~MazeCreator()
+{
+	for (int i = 1; i < mazeRows; i++)
+	{
+		for (int j = 1; j < mazeColums; j++)
+		{
+			maze[i][j] = ObjID::PATH;
+		}
+	}
 }

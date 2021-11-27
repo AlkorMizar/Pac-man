@@ -61,6 +61,7 @@ namespace maze {
 		std::map<int, smallArray> map;
 		int mazeRows, mazeColums;
 		
+		void generateEmptyMaze();
 		void goInAllDirections(Cell);
 		std::vector<int> generateRandomDirections();
 		void goInCells(bool isExist, Cell, Cell);
