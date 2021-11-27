@@ -19,10 +19,6 @@ public:
 	GameState getGameState() { return state; }
 	void setGameState(GameState);
 
-private:
-	maze::MazeCreator mazeCreator;
-	GameState state;
-
 	maze::TwoDimArr map;
 
 	Player player;
@@ -30,4 +26,10 @@ private:
 	PinkGhost pink;
 	BlueGhost blue;
 	OrangeGhost orange;
+
+private:
+	maze::MazeCreator mazeCreator;
+	GameState state;
+
+	
 };

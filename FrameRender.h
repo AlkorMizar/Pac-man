@@ -2,6 +2,7 @@
 
 #include <windows.h>
 #include "GameContext.h"
+#include "Constant.h"
 
 class Sprite
 {
@@ -39,18 +40,19 @@ public:
 	~FrameRender();
 	void setCurrentContext(GameContext& _currentGameContext) { currentGameContext = _currentGameContext; }
 	bool renderNextFrame();
+	void renderButton(HDC hdc);
+	void renderText();
 	
 	Sprite menu, map, player, coin, superCoin, cherry, blue, red, pink, orange, scatter;
 
 private:
-	const int TILE_SIZE = 27,
-		TILE_CENTER = 27 / 2 + 1,
-		BORDER_LEFT = 300,
-		MAZE_BORDER_FIRST_COORD = 9,
-		MAZE_BORDER_LEFT_COORD = 17;
-
-	void createMenu();
-	void loadBMP(HWND hWnd, HINSTANCE hInstance);
+	void createMap();
+	void rednderPlayerInfo();
+	void renderObjects();
+	void loadBMP();
 	GameContext& currentGameContext;
+	HFONT hFont;
+	HWND hWnd;
+	HINSTANCE hInstance;
 };
 

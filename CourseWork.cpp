@@ -3,18 +3,18 @@
 #include <windows.h>
 #include "GameCore.h"
 
-GameCore game;
+GameCore *game;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    game=GameCore(hInstance, hPrevInstance, lpCmdLine, nCmdShow, WndProc);
-    return game.play();
+    game=new GameCore(hInstance, hPrevInstance, lpCmdLine, nCmdShow, WndProc);
+    return game->play();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 LRESULT CALLBACK WndProc(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
 {
-    return game.Process(hWnd, messg, wParam, lParam);
+    return game->Process(hWnd, messg, wParam, lParam);
 }
