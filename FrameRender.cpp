@@ -8,6 +8,20 @@
 using namespace std;
 using namespace frameContext;
 
+
+void FrameRender::renderMesh()
+{
+    HPEN  pen = CreatePen(PS_SOLID, 1, frameContext::BLUE_COLOR);
+    SelectObject(map.hdc, pen);
+    for (size_t i = 0; i < mazeSize::ROWS_IN_MAZE; i++)
+    {
+        MoveToEx(map.hdc, 0, i*TILE_SIZE, NULL);
+        LineTo(map.hdc, mazeSize::ROWS_IN_MAZE*TILE_SIZE, i * TILE_SIZE);
+        MoveToEx(map.hdc, i * TILE_SIZE, 0, NULL);
+        LineTo(map.hdc, i * TILE_SIZE, mazeSize::ROWS_IN_MAZE * TILE_SIZE);
+    }
+}
+
 void FrameRender::createMap()
 {
     HDC mainDC = GetDC(hWnd);
@@ -32,59 +46,60 @@ void FrameRender::createMap()
     for (size_t i = 1; i < mazeSize::ROWS_IN_MAZE; i++)
     {
         for (size_t j = 1; j < mazeSize::COLUMS_IN_MAZE; j++)
-        {
+        {   
+
             if ((currentGameContext.map[i][j] & ObjID::PATH) == ObjID::PATH) {
                 if (currentGameContext.map[i - 1][j] == ObjID::WALL) {
-                    int x1 = j * frameContext::TILE_SIZE + frameContext::TILE_DELTA;
-                    int x2 = x1 + frameContext::TILE_DELTA;
+                    int x1 = j * frameContext::TILE_SIZE + frameContext::TILE_BORDER;
+                    int x2 = x1 + frameContext::TILE_CENTER_L;
 
-                    int y1 = i * frameContext::TILE_SIZE - frameContext::TILE_DELTA;
+                    int y1 = i * frameContext::TILE_SIZE - frameContext::TILE_BORDER;
                     int y2 = y1;
-                    x1 += currentGameContext.map[i - 1][j - 1] == ObjID::WALL ? -frameContext::TILE_DELTA * 2 : 0;
-                    x2 += currentGameContext.map[i - 1][j + 1] == ObjID::WALL ? +frameContext::TILE_DELTA * 2 : 0;
+                    x1 += currentGameContext.map[i - 1][j - 1] == ObjID::WALL ? -frameContext::TILE_BORDER * 2 : 0;
+                    x2 += currentGameContext.map[i - 1][j + 1] == ObjID::WALL ? +frameContext::TILE_BORDER * 2 : 0;
                     MoveToEx(map.hdc, x1, y1, NULL);
                     LineTo(map.hdc, x2, y2);
                 }
 
                 if (currentGameContext.map[i + 1][j] == ObjID::WALL) {
-                    int x1 = j * frameContext::TILE_SIZE + frameContext::TILE_DELTA;
-                    int x2 = x1 + frameContext::TILE_DELTA;
+                    int x1 = j * frameContext::TILE_SIZE + frameContext::TILE_BORDER;
+                    int x2 = x1 + frameContext::TILE_CENTER_L;
 
-                    int y1 = (i + 1) * frameContext::TILE_SIZE + frameContext::TILE_DELTA;
+                    int y1 = (i + 1) * frameContext::TILE_SIZE + frameContext::TILE_BORDER;
                     int y2 = y1;
-                    x1 += currentGameContext.map[i + 1][j - 1] == ObjID::WALL ? -frameContext::TILE_DELTA * 2 : 0;
-                    x2 += currentGameContext.map[i + 1][j + 1] == ObjID::WALL ? +frameContext::TILE_DELTA * 2 : 0;
+                    x1 += currentGameContext.map[i + 1][j - 1] == ObjID::WALL ? -frameContext::TILE_BORDER * 2 : 0;
+                    x2 += currentGameContext.map[i + 1][j + 1] == ObjID::WALL ? +frameContext::TILE_BORDER * 2 : 0;
                     MoveToEx(map.hdc, x1, y1, NULL);
                     LineTo(map.hdc, x2, y2);
                 }
 
                 if (currentGameContext.map[i][j - 1] == ObjID::WALL) {
-                    int x1 = j * frameContext::TILE_SIZE - frameContext::TILE_DELTA;
+                    int x1 = j * frameContext::TILE_SIZE - frameContext::TILE_BORDER;
                     int x2 = x1;
 
-                    int y1 = i * frameContext::TILE_SIZE + frameContext::TILE_DELTA;
-                    int y2 = y1 + frameContext::TILE_DELTA;
-                    y1 += currentGameContext.map[i - 1][j - 1] == ObjID::WALL ? -frameContext::TILE_DELTA * 2 : 0;
-                    y2 += currentGameContext.map[i + 1][j - 1] == ObjID::WALL ? +frameContext::TILE_DELTA * 2 : 0;
+                    int y1 = i * frameContext::TILE_SIZE + frameContext::TILE_BORDER;
+                    int y2 = y1 + frameContext::TILE_CENTER_L;
+                    y1 += currentGameContext.map[i - 1][j - 1] == ObjID::WALL ? -frameContext::TILE_BORDER * 2 : 0;
+                    y2 += currentGameContext.map[i + 1][j - 1] == ObjID::WALL ? +frameContext::TILE_BORDER * 2 : 0;
                     MoveToEx(map.hdc, x1, y1, NULL);
                     LineTo(map.hdc, x2, y2);
                 }
 
                 if (currentGameContext.map[i][j + 1] == ObjID::WALL) {
-                    int x1 = (j + 1) * frameContext::TILE_SIZE + frameContext::TILE_DELTA;
+                    int x1 = (j + 1) * frameContext::TILE_SIZE + frameContext::TILE_BORDER;
                     int x2 = x1;
 
-                    int y1 = i * frameContext::TILE_SIZE + frameContext::TILE_DELTA;
-                    int y2 = y1 + frameContext::TILE_DELTA;
-                    y1 += currentGameContext.map[i - 1][j + 1] == ObjID::WALL ? -frameContext::TILE_DELTA * 2 : 0;
-                    y2 += currentGameContext.map[i + 1][j + 1] == ObjID::WALL ? +frameContext::TILE_DELTA * 2 : 0;
+                    int y1 = i * frameContext::TILE_SIZE + frameContext::TILE_BORDER;
+                    int y2 = y1 + frameContext::TILE_CENTER_L;
+                    y1 += currentGameContext.map[i - 1][j + 1] == ObjID::WALL ? -frameContext::TILE_BORDER * 2 : 0;
+                    y2 += currentGameContext.map[i + 1][j + 1] == ObjID::WALL ? +frameContext::TILE_BORDER * 2 : 0;
                     MoveToEx(map.hdc, x1, y1, NULL);
                     LineTo(map.hdc, x2, y2);
                 }
             }
         }
     }
-
+    renderMesh();
     DeleteObject(pen);
     ReleaseDC(hWnd, mainDC);
 }
@@ -178,11 +193,10 @@ void FrameRender::renderButton(HDC hdc)
     );
 }
 
-void FrameRender::renderText()
+void FrameRender::renderText(HDC mainDC)
 {
 
     RECT rect = elementSize::COIN_RECT;
-    HDC mainDC = GetDC(hWnd);
     HFONT hOldFont = (HFONT)SelectObject(mainDC, hFont);
     SetTextColor(mainDC, BLUE_COLOR);
     SetBkColor(mainDC, BLACK_COLOR);
@@ -194,8 +208,6 @@ void FrameRender::renderText()
     DrawText(mainDC, L"LIVES", -1, &rect,
         DT_SINGLELINE 
     );
-    ReleaseDC(hWnd, mainDC);
-    rednderPlayerInfo();
 }
 
 void FrameRender::loadBMP() {
@@ -218,8 +230,8 @@ void FrameRender::loadBMP() {
     }
 
     ReleaseDC(hWnd, mainDC);
-    renderText();
 }
+
 
 FrameRender::FrameRender(HWND _hWnd, HINSTANCE _hInstance,GameContext& _currentGameContext)
     :currentGameContext(_currentGameContext)
@@ -229,11 +241,49 @@ FrameRender::FrameRender(HWND _hWnd, HINSTANCE _hInstance,GameContext& _currentG
     hFont = CreateFont(33, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Stencil");
     loadBMP();
     createMap();
+    renderText(GetDC(hWnd));
 }
 
 FrameRender::~FrameRender()
 {
 }
+
+
+void FrameRender::renderPlayer()
+{
+    if (currentGameContext.player.isInGame) {
+        Coords tile = currentGameContext.player.getCurrentTile()*TILE_SIZE;
+        Coords offset = currentGameContext.player.getOffset() * (TILE_SIZE / 100.0);
+        int x1 = tile.x +offset.x + TILE_CENTER - player.width / 2,
+            y1 = tile.y + offset.y + TILE_CENTER - player.height / 2;
+        BitBlt(mapTraced.hdc, x1, y1, player.width, player.height,
+            player.hdc, 0, 0, SRCCOPY);
+    }
+}
+
+void FrameRender::renderEnemies()
+{
+    renderEnemy(currentGameContext.red,
+        currentGameContext.red.isInScatter ? scatter : red);
+    renderEnemy(currentGameContext.blue,
+        currentGameContext.blue.isInScatter ? scatter : blue);
+    renderEnemy(currentGameContext.pink,
+        currentGameContext.pink.isInScatter ? scatter : pink);
+    renderEnemy(currentGameContext.orange,
+        currentGameContext.orange.isInScatter ? scatter : orange);
+}
+
+void FrameRender::renderEnemy(Entity& entity, Sprite sp)
+{
+    if (entity.isInGame) {
+        Coords tile = entity.getCurrentTile() + entity.getOffset();
+        int x1 = tile.x * TILE_SIZE + TILE_CENTER - sp.width / 2,
+            y1 = tile.y * TILE_SIZE + TILE_CENTER - sp.height / 2;
+        BitBlt(mapTraced.hdc, x1, y1, sp.width, sp.height,
+            sp.hdc, 0, 0, SRCCOPY);
+    }
+}
+
 
 bool FrameRender::renderNextFrame()
 {
@@ -266,11 +316,11 @@ bool FrameRender::renderNextFrame()
                 }
             }
         }
-    }
-
-
-    
+    }   
+    renderPlayer(); 
+    renderEnemies();
     BitBlt(mainDC, frameContext::BORDER_LEFT, 0, map.width, map.height,
         mapTraced.hdc, 0, 0, SRCCOPY);
+    rednderPlayerInfo();
     return true;
 }

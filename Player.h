@@ -1,8 +1,8 @@
 #pragma once
-#include "BaseClass.h"
+#include "Entity.h"
 #include "Coords.h"
 
-class Player:Entity
+class Player:public Entity
 {
 public:
 	Player();
@@ -12,7 +12,10 @@ public:
 	void setLivesCount(int);
 	void DecreaseLives();
 	void setCoinCount(int);
+	void increaseCoinCount(int val) { coinsCount += val; }
 	void setCurrentTile(Coords);
+	void setDirection(Coords);
+	void setOffset(Coords);
 private:
 	int coinsCount;
 	int livesCount;

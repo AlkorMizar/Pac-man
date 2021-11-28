@@ -3,7 +3,7 @@
 #include "Constant.h"
 #include "Enemy.h"
 
-class BlueGhost:Enemy
+class BlueGhost:public Enemy
 {
 public:
 	BlueGhost();

@@ -1,7 +1,7 @@
 #pragma once
 #include "Enemy.h"
 
-class PinkGhost:Enemy
+class PinkGhost:public Enemy
 {
 public:
 	PinkGhost();

@@ -1,7 +1,7 @@
 #pragma once
 #include "Enemy.h"
 
-class OrangeGhost:Enemy
+class OrangeGhost:public Enemy
 {
 public:
 	OrangeGhost();

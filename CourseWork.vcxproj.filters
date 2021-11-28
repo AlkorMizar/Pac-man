@@ -56,7 +56,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseClass.h">
+    <ClInclude Include="Entity.h">
       <Filter>Файлы заголовков\EntityHeader</Filter>
     </ClInclude>
     <ClInclude Include="Coords.h">

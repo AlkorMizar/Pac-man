@@ -3,6 +3,7 @@
 #include <windows.h>
 #include "GameContext.h"
 #include "Constant.h"
+#include "Entity.h"
 
 class Sprite
 {
@@ -41,15 +42,19 @@ public:
 	void setCurrentContext(GameContext& _currentGameContext) { currentGameContext = _currentGameContext; }
 	bool renderNextFrame();
 	void renderButton(HDC hdc);
-	void renderText();
+	void renderText(HDC mainDC);
 	void reloadMap() { createMap(); }
 	Sprite mapTraced, map, player, coin, superCoin, cherry, blue, red, pink, orange, scatter;
 
 private:
+	void renderPlayer();
+	void renderEnemies();
+	void renderEnemy(Entity& entity,Sprite sp);
 	void createMap();
 	void rednderPlayerInfo();
 	void renderObjects();
 	void loadBMP();
+	void renderMesh();
 	//void drawLine(int i, int j, bool isVertical, int side);
 	GameContext& currentGameContext;
 	HFONT hFont;

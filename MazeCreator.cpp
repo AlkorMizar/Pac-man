@@ -201,11 +201,11 @@ TwoDimArr maze::MazeCreator::generateMap(MazeContext context)
 		goInAllDirections(Cell{ r,c });
 		deleteDeadEnds();
 		deleteTwists(context.dificulty);
-		createTonnel();
 	}
 	else {
 		generateEmptyMaze();
 	}	
+	createTonnel();
 	return maze;
 }
 

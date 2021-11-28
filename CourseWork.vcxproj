@@ -151,7 +151,7 @@
     <ClCompile Include="RedGhost.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseClass.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="BlueGhost.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Coords.h" />

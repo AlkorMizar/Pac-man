@@ -56,6 +56,9 @@ int GameCore::play()
         (HINSTANCE)hInstance,       // Указатель на текущее приложение
         NULL);                  // Передается в качестве lParam в событие WM_CREATE
 
+    currentGameContext = GameContext();
+
+    frameRender = new FrameRender(hWnd, hInstance, currentGameContext);
     if (!hWnd)
     {
         MessageBox(NULL, TEXT("Не удается создать главное окно!"), TEXT("Ошибка"), MB_OK);
@@ -70,11 +73,13 @@ int GameCore::play()
         (HMENU)0,
         hInstance, NULL);
 
+    SetTimer(hWnd,             // handle to main window 
+        ID_MAIN_TIMER,            // timer identifier 
+        15,                  
+        (TIMERPROC)NULL);     // no timer callback 
+
     ::SetWindowLong(hWnd, GWL_STYLE, GetWindowLong(hWnd, GWL_STYLE) & ~WS_SIZEBOX);
 
-    currentGameContext = GameContext();
-
-    frameRender =new FrameRender(hWnd,hInstance,currentGameContext);
     // Показываем наше окно
     ShowWindow(hWnd, SW_SHOWMAXIMIZED);
     UpdateWindow(hWnd);
@@ -106,23 +111,47 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
         if (pDIS->hwndItem == btnStartNewGame)
         {
             frameRender->renderButton(pDIS->hDC);
+            frameRender->renderText(GetDC(hWnd));
+            
         }
         return 0;
+    }
+    case WM_TIMER:
+    {
+        currentGameContext.reCalculate();
+        frameRender->renderNextFrame(); 
+        break;
+    }
+    case WM_KEYDOWN:
+    {
+        switch (wParam)
+        {
+        case VK_DOWN: {
+            currentGameContext.setPlayerDirection(directions::DOWN);
+            break; }
+        case VK_LEFT: {
+            currentGameContext.setPlayerDirection(directions::LEFT);
+            break; }
+        case VK_UP: {
+            currentGameContext.setPlayerDirection(directions::UP);
+            break; }
+        case VK_RIGHT: {
+            currentGameContext.setPlayerDirection(directions::RIGHT);
+            break; }
+        default:
+            break;
+        }
+        break;
     }
     case WM_COMMAND:
     {
         if (wParam == 0)
         {
-            MessageBox(hWnd, L"Нажата кнопка Button 1",
-                L"Message WM_COMMAND", MB_OK);
+            currentGameContext.setGameState(GameState::START_PLAYING);
+            frameRender->reloadMap();
+            
         }
         return 0;
-    }
-    case WM_PAINT: {
-        GetClientRect(hWnd, &Rect);
-       
-        EndPaint(hWnd, &ps);
-        break;
     }
     case WM_DESTROY:
         PostQuitMessage(0);

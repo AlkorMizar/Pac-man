@@ -21,6 +21,7 @@ public:
 
 private:
 	const int NEW_START = 1;
+	const int ID_MAIN_TIMER = 2;
 	void startNewGame();
 	GameContext currentGameContext;
 	HWND hWnd;

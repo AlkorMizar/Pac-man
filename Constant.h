@@ -4,12 +4,22 @@
 #include <windows.h>
 
 namespace directions {
-	const Coords    UP{ 0, 1 };
-	const Coords  DOWN{ 0,-1 };
-	const Coords RIGHT{ 1, 0 };
+	const Coords    UP{  0,-1 };
+	const Coords  DOWN{  0, 1 };
+	const Coords RIGHT{  1, 0 };
 	const Coords  LEFT{ -1, 0 };
+	const Coords STILL{  0, 0 };
 }
 
+namespace points {
+	const int COIN_POINT = 10,
+		SUPER_COIN_POINT = 50,
+		FIRST_GHOST_POINT = 200,
+		SECOND_GHOST_POINT = 400,
+		THIRD_GHOST_POINT = 800,
+		FOURTH_GHOST_POINT = 1600,
+		CHERRY_POINT = 100;
+}
 
 namespace mazeSize {
 	const int ROWS_IN_MAZE = 28;
@@ -21,15 +31,17 @@ namespace frameContext {
 	const int TILE_SIZE = 27,
 		TILE_CENTER = 27 / 2 + 1,
 		BORDER_TOP = 0,
-		BORDER_BOTTOM = TILE_SIZE * (mazeSize::COLUMS_IN_MAZE+1),
+		BORDER_BOTTOM = TILE_SIZE * (mazeSize::COLUMS_IN_MAZE + 1),
 		BORDER_LEFT = 300,
-		BORDER_RIGHT = BORDER_LEFT + TILE_SIZE * (mazeSize::ROWS_IN_MAZE+1),
-		TILE_DELTA = TILE_SIZE/3;
+		BORDER_RIGHT = BORDER_LEFT + TILE_SIZE * (mazeSize::ROWS_IN_MAZE + 1),
+		TILE_BORDER =7,
+		TILE_CENTER_L = TILE_SIZE-TILE_BORDER*2,
+		TILE_DELTA = 9;
 	const int BLUE_COLOR = RGB(0, 39, 255);
 	const int BLACK_COLOR = 0;	
 }
 
-namespace elementSize {
+namespace elementSize {;
 	const int BUTTON_WIDTH = 250;
 	const int BUTTON_HEIGHT = 100;
 	
