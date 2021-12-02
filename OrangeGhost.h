@@ -1,12 +1,12 @@
 #pragma once
 #include "Enemy.h"
+#include <vector>
 
 class OrangeGhost:public Enemy
 {
 public:
-	OrangeGhost();
+	OrangeGhost(std::vector<int>);
 	~OrangeGhost();
-	void setCurrentTile(Coords newTile, Coords playerTile);
 private:
 
 };

@@ -17,6 +17,6 @@ public:
 	void setDirection(Coords);
 	void setOffset(Coords);
 private:
-	int coinsCount;
-	int livesCount;
+	int coinsCount=0;
+	int livesCount=0;
 };

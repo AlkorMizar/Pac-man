@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Constant.h"
 #include "MazeCreator.h"
 

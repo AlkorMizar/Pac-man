@@ -1,12 +1,19 @@
 #include "GameCore.h"
 #include "FrameRender.h"
 
-#include <iostream>
 #include <string>
+
+#include <CommCtrl.h>
+#include <time.h>
 
 #pragma comment(lib, "Msimg32.lib")
 
+#define WM_COMMAND                      0x0111
+#define WM_SYSCOMMAND                   0x0112
+
 using namespace std;
+using namespace elementSize;
+
 GameCore::GameCore(HINSTANCE _hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow,WNDPROC wndProc)
 {
     hInstance = _hInstance;
@@ -67,15 +74,31 @@ int GameCore::play()
 
     btnStartNewGame = CreateWindow(L"button", L"Start new game",
         WS_CHILD | BS_OWNERDRAW| WS_VISIBLE | BS_PUSHBUTTON,
-        frameContext::BORDER_RIGHT+100,400,
-        elementSize::BUTTON_WIDTH, elementSize::BUTTON_HEIGHT,
+        ::BUTTON_RECT.left,::BUTTON_RECT.top,
+        ::BUTTON_WIDTH, ::BUTTON_HEIGHT,
         hWnd,
-        (HMENU)0,
+        (HMENU)NEW_START,
+        hInstance, NULL);
+
+    CreateWindow(L"button", L"NORMAL",
+        WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+        ::COMBOBOX_RECT.left, ::COMBOBOX_RECT.top, 100, 30, hWnd, (HMENU)10001, hInstance, NULL);
+    CreateWindow(L"button", L"MAZE LIKE",
+        WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+        ::COMBOBOX_RECT.left, ::COMBOBOX_RECT.top+30, 100, 30, hWnd, (HMENU)10002, hInstance, NULL);
+    
+
+    seedWriter = CreateWindow(L"edit", L"",
+        WS_CHILD | WS_VISIBLE| ES_CENTER| ES_NUMBER,
+        ::TEXTBOX_RECT.left, ::TEXTBOX_RECT.top,
+        ::BUTTON_WIDTH, ::TEXT_BOX_HEIGHT,
+        hWnd,
+        (HMENU)NEW_START,
         hInstance, NULL);
 
     SetTimer(hWnd,             // handle to main window 
         ID_MAIN_TIMER,            // timer identifier 
-        15,                  
+        16,                  
         (TIMERPROC)NULL);     // no timer callback 
 
     ::SetWindowLong(hWnd, GWL_STYLE, GetWindowLong(hWnd, GWL_STYLE) & ~WS_SIZEBOX);
@@ -105,20 +128,63 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
     HDC mainDC;
     switch (messg)
     {
+    case WM_COMMAND:
+    {
+        if (wParam == NEW_START) {
+            int editlength = GetWindowTextLength(seedWriter)+1;
+            std::vector<wchar_t> txt(editlength);
+            GetWindowText(seedWriter, (LPWSTR)&txt[0], editlength);
+
+            long seed = static_cast<long>(time(NULL));
+            std::wstring text = L"Creating map using random seed ";
+            try
+            {
+                int s = std::stoll(&txt[0]);
+                if (s != currentGameContext.getCurrentSeed() ||
+                    currDif != currentGameContext.getDifficulty()) {
+                    seed = s;
+                    text = L"Creating map using user's seed ";
+                }
+            }
+            catch (const std::exception&)
+            {
+            }
+
+            SetWindowText(seedWriter, (LPWSTR)std::to_wstring(seed).c_str());
+
+            MessageBox(NULL, text.c_str(), L"edit text", MB_OK);
+            currentGameContext.startNewGame(currDif,seed);
+            frameRender->reloadMap();
+        }
+        // Если мы нажали на 1-й радиокнопке.
+        if (LOWORD(wParam) == 10001) {
+            diffText = L"EASY";
+            currDif = maze::MazeTypeEnum::NORMAL;
+        }
+        // Если мы нажали на 2-й радиокнопке.
+        if (LOWORD(wParam) == 10002) {
+            diffText = L"NORMAL";
+            currDif = maze::MazeTypeEnum::MAZE_LIKE;
+        }
+        break;
+    }
     case WM_DRAWITEM:
     {
         LPDRAWITEMSTRUCT pDIS = (LPDRAWITEMSTRUCT)lParam;
         if (pDIS->hwndItem == btnStartNewGame)
         {
             frameRender->renderButton(pDIS->hDC);
-            frameRender->renderText(GetDC(hWnd));
+            frameRender->renderText();
             
         }
-        return 0;
+        break;
     }
     case WM_TIMER:
     {
         currentGameContext.reCalculate();
+        if (currentGameContext.getGameState() == GameState::WAIT_START) {
+            frameRender->reloadMap();
+        }
         frameRender->renderNextFrame(); 
         break;
     }
@@ -143,20 +209,12 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
         }
         break;
     }
-    case WM_COMMAND:
-    {
-        if (wParam == 0)
-        {
-            currentGameContext.setGameState(GameState::START_PLAYING);
-            frameRender->reloadMap();
-            
-        }
-        return 0;
-    }
-    case WM_DESTROY:
+    
+    case WM_DESTROY: {
         PostQuitMessage(0);
         break;
-
+    }
+    return 0;
     default:
         return (DefWindowProc(hWnd, messg, wParam, lParam));
     }

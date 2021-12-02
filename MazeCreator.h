@@ -17,16 +17,16 @@ namespace maze {
 		CROSS = 0B010111010
 	};
 
-	enum DificultyEnum
+	enum MazeTypeEnum
 	{
-		HARD=10000,NORMAL=4,EASY=1
+		MAZE_LIKE=4,NORMAL=1
 	};
 
 	struct MazeContext
 	{
 		int mazeRows;
 		int mazeColums;
-		DificultyEnum dificulty;
+		MazeTypeEnum dificulty;
 		long seed;
 	};
 

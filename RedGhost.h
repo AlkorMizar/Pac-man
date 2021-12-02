@@ -4,9 +4,8 @@
 class RedGhost:public Enemy
 {
 public:
-	RedGhost();
+	RedGhost(std::vector<int> time);
 	~RedGhost();
-	void setCurrentTile(Coords newTile, Coords playerTile);
 private:
 
 };

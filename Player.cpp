@@ -4,7 +4,7 @@ Player::Player()
 {
 	coinsCount = 0;
 	livesCount = 3;
-	speed =10;// 10% per frame
+	speed =14;// 10% per frame
 	currentTile=Coords{ 0,0 };
 	offset = {0,0};
 	isInGame = false;
@@ -17,7 +17,7 @@ Player::~Player()
 
 int Player::getCoinCount()
 {
-	return 0;
+	return coinsCount;
 }
 
 int Player::getLivesCount()
@@ -35,8 +35,9 @@ void Player::DecreaseLives()
 	livesCount--;
 }
 
-void Player::setCoinCount(int)
+void Player::setCoinCount(int val)
 {
+	coinsCount = val;
 }
 
 void Player::setCurrentTile(Coords tile)
@@ -51,3 +52,4 @@ void Player::setDirection(Coords dir) {
 void Player::setOffset(Coords n) {
 	offset = n;
 }
+

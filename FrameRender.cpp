@@ -11,15 +11,18 @@ using namespace frameContext;
 
 void FrameRender::renderMesh()
 {
-    HPEN  pen = CreatePen(PS_SOLID, 1, frameContext::BLUE_COLOR);
+    HPEN  pen = CreatePen(PS_SOLID, 1, RGB(50,50,50));
+    
     SelectObject(map.hdc, pen);
-    for (size_t i = 0; i < mazeSize::ROWS_IN_MAZE; i++)
+    for (size_t i = 1; i < mazeSize::ROWS_IN_MAZE+1; i++)
     {
-        MoveToEx(map.hdc, 0, i*TILE_SIZE, NULL);
+        MoveToEx(map.hdc,TILE_SIZE, i*TILE_SIZE, NULL);
         LineTo(map.hdc, mazeSize::ROWS_IN_MAZE*TILE_SIZE, i * TILE_SIZE);
-        MoveToEx(map.hdc, i * TILE_SIZE, 0, NULL);
+        MoveToEx(map.hdc, i * TILE_SIZE, TILE_SIZE, NULL);
         LineTo(map.hdc, i * TILE_SIZE, mazeSize::ROWS_IN_MAZE * TILE_SIZE);
     }
+
+    DeleteObject(pen);
 }
 
 void FrameRender::createMap()
@@ -27,8 +30,8 @@ void FrameRender::createMap()
     HDC mainDC = GetDC(hWnd);
 
     map.hdc = CreateCompatibleDC(mainDC);
-    map.width = frameContext::BORDER_RIGHT - frameContext::BORDER_LEFT;
-    map.height = frameContext::BORDER_BOTTOM - frameContext::BORDER_TOP;
+    mapTraced.width=map.width = frameContext::BORDER_RIGHT - frameContext::BORDER_LEFT;
+    mapTraced.height=map.height = frameContext::BORDER_BOTTOM - frameContext::BORDER_TOP;
     HBITMAP hBmp = CreateCompatibleBitmap(mainDC, map.width, map.height);
     SelectObject(map.hdc, hBmp);
 
@@ -36,13 +39,18 @@ void FrameRender::createMap()
     br.lbStyle = BS_SOLID;
     br.lbColor = 0x0;
     HBRUSH brush;
+    
     brush = CreateBrushIndirect(&br);
+    
     RECT Rect = { 0 ,0,map.width, map.height };
     FillRect(map.hdc, &Rect, brush);
+    
     DeleteObject(brush);
 
     HPEN  pen = CreatePen(PS_SOLID, 3, frameContext::BLUE_COLOR);
+    
     SelectObject(map.hdc, pen);
+    
     for (size_t i = 1; i < mazeSize::ROWS_IN_MAZE; i++)
     {
         for (size_t j = 1; j < mazeSize::COLUMS_IN_MAZE; j++)
@@ -99,8 +107,11 @@ void FrameRender::createMap()
             }
         }
     }
-    renderMesh();
+   // renderMesh();
+    
+    DeleteObject(hBmp);
     DeleteObject(pen);
+
     ReleaseDC(hWnd, mainDC);
 }
 
@@ -120,7 +131,9 @@ void FrameRender::rednderPlayerInfo()
     br.lbStyle = BS_SOLID;
     br.lbColor = BLACK_COLOR;
     HBRUSH brush;
+    
     brush = CreateBrushIndirect(&br);
+    
     FillRect(mainDC, &rect, brush);
     
     DrawText(mainDC,text.c_str(), -1, &rect,
@@ -135,21 +148,28 @@ void FrameRender::rednderPlayerInfo()
     DrawText(mainDC, text.c_str(), -1, &rect,
         DT_SINGLELINE
     );
+
+    text = std::to_wstring(currentGameContext.coinCount);
+
+    rect = elementSize::LEVEL_COUNT_RECT;
+    FillRect(mainDC, &rect, brush);
+    DrawText(mainDC, text.c_str(), -1, &rect,
+        DT_SINGLELINE
+    );
+
     DeleteObject(brush);
+    
     ReleaseDC(hWnd, mainDC);
 }
 
-void FrameRender::renderObjects()
-{
-}
 
 void FrameRender::renderButton(HDC hdc)
 {
     RECT Rect;
+    
+    HFONT hOldFont = (HFONT)SelectObject(hdc, hFont);
     SetTextColor(hdc, BLUE_COLOR);
     SetBkColor(hdc, BLACK_COLOR);
-    HFONT hOldFont = (HFONT)SelectObject(hdc, hFont);
-    
 
     Rect.top = 0;
     Rect.bottom = elementSize::BUTTON_HEIGHT;
@@ -165,17 +185,24 @@ void FrameRender::renderButton(HDC hdc)
     br.lbStyle = BS_SOLID;
     br.lbColor = BLUE_COLOR;
     HBRUSH brush;
+    
     brush = CreateBrushIndirect(&br);
+    
     FillRect(hCmpDC, &Rect, brush);
+    
     DeleteObject(brush);
+    
     br.lbStyle = BS_SOLID;
     br.lbColor = BLACK_COLOR;
+    
     brush = CreateBrushIndirect(&br);
+    
     Rect.top = 3;
     Rect.bottom = elementSize::BUTTON_HEIGHT-3;
     Rect.left = 3;
     Rect.right = elementSize::BUTTON_WIDTH-3;
     FillRect(hCmpDC, &Rect, brush);
+    
     DeleteObject(brush);
 
     Rect.top = 0;
@@ -186,16 +213,21 @@ void FrameRender::renderButton(HDC hdc)
     SetStretchBltMode(hdc, COLORONCOLOR);
     BitBlt(hdc, 0, 0, elementSize::BUTTON_WIDTH, elementSize::BUTTON_HEIGHT,
         hCmpDC, 0, 0, SRCCOPY);
-    DeleteDC(hCmpDC);
-    DeleteObject(hBmp);
     DrawText(hdc, L"Start new game", -1, &Rect,
         DT_SINGLELINE | DT_CENTER | DT_VCENTER
     );
+
+
+    DeleteObject(hCmpDC);
+    DeleteObject(hBmp);
+    
+    
 }
 
-void FrameRender::renderText(HDC mainDC)
+void FrameRender::renderText()
 {
-
+    HDC mainDC = GetDC(hWnd);
+    
     RECT rect = elementSize::COIN_RECT;
     HFONT hOldFont = (HFONT)SelectObject(mainDC, hFont);
     SetTextColor(mainDC, BLUE_COLOR);
@@ -208,6 +240,13 @@ void FrameRender::renderText(HDC mainDC)
     DrawText(mainDC, L"LIVES", -1, &rect,
         DT_SINGLELINE 
     );
+
+    rect = elementSize::LEVEL_TEXT_RECT;
+    DrawText(mainDC, L"LEVELS", -1, &rect,
+        DT_SINGLELINE
+    );
+
+    ReleaseDC(hWnd, mainDC);
 }
 
 void FrameRender::loadBMP() {
@@ -215,8 +254,8 @@ void FrameRender::loadBMP() {
     HDC mainDC = GetDC(hWnd);
     
     std::map<std::wstring, Sprite&> objDC{ {L"coin.bmp",coin},{L"superCoin.bmp",superCoin} ,{L"cherry.bmp",cherry} ,
-                                        {L"player.bmp",player},{L"scatter.bmp",scatter},
-                                        {L"red.bmp",red} ,{L"pinky.bmp",pink} ,{L"orange.bmp",orange} ,{L"blue.bmp",blue} };
+                                           {L"scatter.bmp",scatter},{L"red.bmp",red} ,{L"pinky.bmp",pink} ,
+                                           {L"orange.bmp",orange} ,{L"blue.bmp",blue} };
 
     for (auto& kv : objDC) {
         HBITMAP hBmp = (HBITMAP)LoadImage(hInstance, kv.first.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
@@ -241,7 +280,8 @@ FrameRender::FrameRender(HWND _hWnd, HINSTANCE _hInstance,GameContext& _currentG
     hFont = CreateFont(33, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Stencil");
     loadBMP();
     createMap();
-    renderText(GetDC(hWnd));
+
+    renderText();
 }
 
 FrameRender::~FrameRender()
@@ -252,35 +292,66 @@ FrameRender::~FrameRender()
 void FrameRender::renderPlayer()
 {
     if (currentGameContext.player.isInGame) {
+        HBITMAP hBmp = (HBITMAP)LoadImage(hInstance, L"playerDOWN.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);;
+        Coords dir = currentGameContext.player.getDirection();
+        beforDirectionOfPlayer=dir = dir == directions::STILL ? beforDirectionOfPlayer : dir;
+        if (dir == directions::DOWN) {
+            hBmp = (HBITMAP)LoadImage(hInstance, L"playerDOWN.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+        }
+        else if(dir == directions::UP) {
+            hBmp = (HBITMAP)LoadImage(hInstance, L"playerUP.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
+        }
+        else if (dir == directions::RIGHT) {
+            hBmp = (HBITMAP)LoadImage(hInstance, L"playerRIGHT.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
+        }
+        else if (dir == directions::LEFT) {
+            hBmp = (HBITMAP)LoadImage(hInstance, L"playerLEFT.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+        }
+         
+        if (hBmp != NULL) {
+            BITMAP bm;
+            GetObject(hBmp, sizeof(bm), &bm);
+
+            player.set(CreateCompatibleDC(mapTraced.hdc), bm.bmWidth, bm.bmHeight);
+            SelectObject(player.hdc, hBmp);
+            DeleteObject(hBmp);
+        }
+        else {
+            MessageBox(NULL, TEXT("Starting new game!"), TEXT("New game"), MB_OK);
+        }
         Coords tile = currentGameContext.player.getCurrentTile()*TILE_SIZE;
         Coords offset = currentGameContext.player.getOffset() * (TILE_SIZE / 100.0);
         int x1 = tile.x +offset.x + TILE_CENTER - player.width / 2,
             y1 = tile.y + offset.y + TILE_CENTER - player.height / 2;
-        BitBlt(mapTraced.hdc, x1, y1, player.width, player.height,
-            player.hdc, 0, 0, SRCCOPY);
+        TransparentBlt(mapTraced.hdc, x1, y1, player.width, player.height, player.hdc, 0, 0, player.width, player.height, frameContext::BLACK_COLOR);
+
+        DeleteObject(player.hdc);
     }
 }
 
-void FrameRender::renderEnemies()
-{
+void FrameRender::renderEnemies(){
+    renderEnemy(currentGameContext.player,player);
     renderEnemy(currentGameContext.red,
-        currentGameContext.red.isInScatter ? scatter : red);
+        currentGameContext.red.isFritned ? scatter : red);
     renderEnemy(currentGameContext.blue,
-        currentGameContext.blue.isInScatter ? scatter : blue);
+        currentGameContext.blue.isFritned ? scatter : blue);
     renderEnemy(currentGameContext.pink,
-        currentGameContext.pink.isInScatter ? scatter : pink);
+        currentGameContext.pink.isFritned ? scatter : pink);
     renderEnemy(currentGameContext.orange,
-        currentGameContext.orange.isInScatter ? scatter : orange);
+        currentGameContext.orange.isFritned ? scatter : orange);
 }
 
-void FrameRender::renderEnemy(Entity& entity, Sprite sp)
+void FrameRender::renderEnemy(Entity& entity, Sprite& sp)
 {
     if (entity.isInGame) {
-        Coords tile = entity.getCurrentTile() + entity.getOffset();
-        int x1 = tile.x * TILE_SIZE + TILE_CENTER - sp.width / 2,
-            y1 = tile.y * TILE_SIZE + TILE_CENTER - sp.height / 2;
-        BitBlt(mapTraced.hdc, x1, y1, sp.width, sp.height,
-            sp.hdc, 0, 0, SRCCOPY);
+        Coords tile = entity.getCurrentTile() * TILE_SIZE;
+        Coords offset = entity.getOffset() * (TILE_SIZE / 100.0);
+        int x1 = tile.x + offset.x + TILE_CENTER - sp.width / 2,
+            y1 = tile.y + offset.y + TILE_CENTER - sp.height / 2;
+        TransparentBlt(mapTraced.hdc, x1, y1, sp.width, sp.height, sp.hdc, 0, 0, sp.width, sp.height, frameContext::BLACK_COLOR);
+        
     }
 }
 
@@ -288,39 +359,53 @@ void FrameRender::renderEnemy(Entity& entity, Sprite sp)
 bool FrameRender::renderNextFrame()
 {
     HDC mainDC = GetDC(hWnd);
-    mapTraced.hdc = CreateCompatibleDC(map.hdc);;
-    mapTraced.width = map.width = frameContext::BORDER_RIGHT - frameContext::BORDER_LEFT;
-    mapTraced.height = map.height = frameContext::BORDER_BOTTOM - frameContext::BORDER_TOP;
+    
+    mapTraced.hdc = CreateCompatibleDC(map.hdc);
     HBITMAP hBmp = CreateCompatibleBitmap(mainDC, map.width, map.height);
+    
     SelectObject(mapTraced.hdc, hBmp);
     BitBlt(mapTraced.hdc, 0, 0, map.width, map.height,
         map.hdc, 0, 0, SRCCOPY);
+    int x, y;
     for (size_t i = 1; i < mazeSize::ROWS_IN_MAZE; i++)
     {
         for (size_t j = 1; j < mazeSize::COLUMS_IN_MAZE; j++)
         {
             if ((currentGameContext.map[i][j] & ObjID::PATH) == ObjID::PATH) {
-                Sprite& sp = coin;
+                
                 if ((currentGameContext.map[i][j] & ObjID::COIN) == ObjID::COIN) {
-                    int x = j * frameContext::TILE_SIZE + frameContext::TILE_CENTER - sp.width / 2;
-                    int y = i * frameContext::TILE_SIZE + frameContext::TILE_CENTER - sp.height / 2;
-                    BitBlt(mapTraced.hdc, x, y, sp.width, sp.height,
-                        sp.hdc, 0, 0, SRCCOPY);
+                    x = j * frameContext::TILE_SIZE + frameContext::TILE_CENTER - coin.width / 2;
+                    y = i * frameContext::TILE_SIZE + frameContext::TILE_CENTER - coin.height / 2;
+                    BitBlt(mapTraced.hdc, x, y, coin.width, coin.height,
+                        coin.hdc, 0, 0, SRCCOPY);
                 }
-                Sprite& sp1 = superCoin;
                 if ((currentGameContext.map[i][j] & ObjID::SUPER_COIN) == ObjID::SUPER_COIN) {
-                    int x = j * frameContext::TILE_SIZE + frameContext::TILE_CENTER - sp1.width / 2;
-                    int y = i * frameContext::TILE_SIZE + frameContext::TILE_CENTER - sp1.height / 2;
-                    BitBlt(mapTraced.hdc, x, y, sp1.width, sp1.height,
-                        sp1.hdc, 0, 0, SRCCOPY);
+                    x = j * frameContext::TILE_SIZE + frameContext::TILE_CENTER - superCoin.width / 2;
+                    y = i * frameContext::TILE_SIZE + frameContext::TILE_CENTER - superCoin.height / 2;
+                    BitBlt(mapTraced.hdc, x, y, superCoin.width, superCoin.height,
+                        superCoin.hdc, 0, 0, SRCCOPY);
                 }
             }
         }
     }   
-    renderPlayer(); 
+    if (currentGameContext.isCherryTime) {
+        x = currentGameContext.cherryCoord.x * frameContext::TILE_SIZE + frameContext::TILE_CENTER  - cherry.width / 2;
+        y = currentGameContext.cherryCoord.y * frameContext::TILE_SIZE + frameContext::TILE_CENTER  - cherry.height / 2;
+        BitBlt(mapTraced.hdc, x, y, cherry.width, cherry.height,
+            cherry.hdc, 0, 0, SRCCOPY);
+    }
     renderEnemies();
+    renderPlayer();
+
     BitBlt(mainDC, frameContext::BORDER_LEFT, 0, map.width, map.height,
         mapTraced.hdc, 0, 0, SRCCOPY);
+
     rednderPlayerInfo();
+
+    DeleteObject(hBmp);
+    DeleteObject(mapTraced.hdc);
+    
+    ReleaseDC(hWnd, mainDC);
+    
     return true;
 }

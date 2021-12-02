@@ -3,12 +3,13 @@
 #include "Constant.h"
 #include "Enemy.h"
 
+#include <vector>
+
 class BlueGhost:public Enemy
 {
 public:
-	BlueGhost();
+	BlueGhost(std::vector<int>);
 	~BlueGhost();
-	void setCurrentTile(Coords newTile, Coords playerTile);
 private:
 
 };

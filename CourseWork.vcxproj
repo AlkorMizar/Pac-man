@@ -139,20 +139,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BlueGhost.cpp" />
     <ClCompile Include="CourseWork.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FrameRender.cpp" />
     <ClCompile Include="GameContext.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="MazeCreator.cpp" />
-    <ClCompile Include="OrangeGhost.cpp" />
-    <ClCompile Include="PinkGhost.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="RedGhost.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="BlueGhost.h" />
     <ClInclude Include="Constant.h" />
     <ClInclude Include="Coords.h" />
     <ClInclude Include="Enemy.h" />
@@ -160,10 +156,7 @@
     <ClInclude Include="GameContext.h" />
     <ClInclude Include="GameCore.h" />
     <ClInclude Include="MazeCreator.h" />
-    <ClInclude Include="OrangeGhost.h" />
-    <ClInclude Include="PinkGhost.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="RedGhost.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="blue.bmp" />
@@ -171,7 +164,10 @@
     <Image Include="coin.bmp" />
     <Image Include="orange.bmp" />
     <Image Include="pinky.bmp" />
-    <Image Include="player.bmp" />
+    <Image Include="playerDOWN.bmp" />
+    <Image Include="playerLEFT.bmp" />
+    <Image Include="playerRight.bmp" />
+    <Image Include="playerUP.bmp" />
     <Image Include="red.bmp" />
     <Image Include="scatter.bmp" />
     <Image Include="superCoin.bmp" />

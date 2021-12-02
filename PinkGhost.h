@@ -4,9 +4,8 @@
 class PinkGhost:public Enemy
 {
 public:
-	PinkGhost();
+	PinkGhost(std::vector<int>);
 	~PinkGhost();
-	void setCurrentTile(Coords newTile, Coords playerTile);
 private:
 
 };

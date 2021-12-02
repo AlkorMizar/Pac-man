@@ -12,19 +12,18 @@ public:
 	Coords getCurrentTile() { return currentTile; }
 	Coords getDirection() { return direction; }
 	ObjID getId() { return id; }
-	bool isInGame;
-	bool move() {
-	}
+	bool isInGame=false;
+	void setSpeed(double sp) { speed = sp; }
 
-	virtual void setDirection(Coords) {}
-	virtual void setOffset(Coords) {}
+	void setDirection(Coords dir) { direction = dir; }
+	void setOffset(Coords off) { offset = off; }
 
 protected:
 	
-	Coords currentTile;
-	Coords direction;//from direction constant
-	Coords offset;
-	int speed=8;//percent per Frame
-	ObjID id;
+	Coords currentTile = {0,0};
+	Coords direction = { 0,0 };//from direction constant
+	Coords offset = { 0,0 };
+	double speed;//percent per Frame
+	ObjID id=ObjID::PAC_MAN;
 	
 };

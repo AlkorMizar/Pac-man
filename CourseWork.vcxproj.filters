@@ -19,9 +19,6 @@
     <Filter Include="Файлы заголовков\EntityHeader">
       <UniqueIdentifier>{004a8aaf-9d2e-49f1-9f0e-bca62372fd64}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы заголовков\EntityHeader\Ghosts">
-      <UniqueIdentifier>{adefe53b-ec84-4be9-be36-24a43da078b7}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CourseWork.cpp">
@@ -33,18 +30,6 @@
     <ClCompile Include="GameCore.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="BlueGhost.cpp">
-      <Filter>Исходные файлы\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="PinkGhost.cpp">
-      <Filter>Исходные файлы\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="OrangeGhost.cpp">
-      <Filter>Исходные файлы\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="RedGhost.cpp">
-      <Filter>Исходные файлы\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Исходные файлы\Entity</Filter>
     </ClCompile>
@@ -53,6 +38,9 @@
     </ClCompile>
     <ClCompile Include="GameContext.cpp">
       <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Исходные файлы\Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,18 +59,6 @@
     <ClInclude Include="Enemy.h">
       <Filter>Файлы заголовков\EntityHeader</Filter>
     </ClInclude>
-    <ClInclude Include="RedGhost.h">
-      <Filter>Файлы заголовков\EntityHeader\Ghosts</Filter>
-    </ClInclude>
-    <ClInclude Include="PinkGhost.h">
-      <Filter>Файлы заголовков\EntityHeader\Ghosts</Filter>
-    </ClInclude>
-    <ClInclude Include="BlueGhost.h">
-      <Filter>Файлы заголовков\EntityHeader\Ghosts</Filter>
-    </ClInclude>
-    <ClInclude Include="OrangeGhost.h">
-      <Filter>Файлы заголовков\EntityHeader\Ghosts</Filter>
-    </ClInclude>
     <ClInclude Include="FrameRender.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -97,9 +73,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="player.bmp">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
     <Image Include="pinky.bmp">
       <Filter>Файлы ресурсов</Filter>
     </Image>
@@ -122,6 +95,18 @@
       <Filter>Файлы ресурсов</Filter>
     </Image>
     <Image Include="coin.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="playerDOWN.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="playerLEFT.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="playerRight.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="playerUP.bmp">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>
