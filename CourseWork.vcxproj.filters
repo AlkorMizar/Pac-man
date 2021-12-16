@@ -39,9 +39,6 @@
     <ClCompile Include="GameContext.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Исходные файлы\Entity</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -69,6 +66,12 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="GameContext.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
@@ -109,10 +112,19 @@
     <Image Include="playerUP.bmp">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+    <Image Include="playerClosed.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="pacman_PNG15.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="icon.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Source.txt">
+    <ResourceCompile Include="CourseWork.rc">
       <Filter>Файлы ресурсов</Filter>
-    </Text>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

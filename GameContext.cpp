@@ -61,7 +61,7 @@ void GameContext::createCherry()
 	{
 		cherryCoord.x = rand() % (mazeSize::COLUMS_IN_MAZE - 1) + 1;
 		cherryCoord.y = rand() % (mazeSize::ROWS_IN_MAZE - 1) + 1;
-	} while (map[cherryCoord.y][cherryCoord.x] & COIN || map[cherryCoord.y][cherryCoord.x] == WALL);
+	} while (map[cherryCoord.y][cherryCoord.x] != PATH);
 	cherryTime = 180;
 	map[cherryCoord.y][cherryCoord.x] |= CHERRY;
 }
@@ -109,9 +109,8 @@ void GameContext::setGameState(GameState state)
 		break;
 		level = 0;
 	}
-	case START_PLAYING: {
+	case START_PLAYING: 
 		createGhost();
-		level = 1;
 		map = mazeCreator.generateMap(maze::MazeContext{ mazeSize::ROWS_IN_MAZE,
 													 mazeSize::COLUMS_IN_MAZE,
 													 diff,
@@ -120,6 +119,10 @@ void GameContext::setGameState(GameState state)
 		player.setLivesCount(3);
 		superCoinCount = 4;
 		coinCount = 0;
+		level = 0;
+	case WON:
+	{
+		level++;
 		for (size_t i = 1; i < mazeSize::ROWS_IN_MAZE; i++)
 		{
 			for (size_t j = 1; j < mazeSize::COLUMS_IN_MAZE; j++)
@@ -141,13 +144,10 @@ void GameContext::setGameState(GameState state)
 		cherryTime = -1;
 		cherryCoord = { -1,-1 };
 		isCherryTime = false;
-		
+
 		setGameState(PLAYING);
-		
-		break;
 	}
-	case WON:
-		level++;
+		break;	
 	case PLAYING: {
 		
 		int tonelI = map[ROWS_IN_MAZE / 2][0] & ObjID::TONNEL ? ROWS_IN_MAZE / 2 :
@@ -173,7 +173,7 @@ void GameContext::setGameState(GameState state)
 		break;
 	}
 	case DEAD_PLAYER: {
-		
+		isCherryTime = false;
 		player.DecreaseLives();
 		if (player.getLivesCount()>0) {
 			setGameState(GameState::PLAYING);

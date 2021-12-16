@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CourseWork.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="FrameRender.cpp" />
     <ClCompile Include="GameContext.cpp" />
     <ClCompile Include="GameCore.cpp" />
@@ -157,13 +156,18 @@
     <ClInclude Include="GameCore.h" />
     <ClInclude Include="MazeCreator.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="blue.bmp" />
     <Image Include="cherry.bmp" />
     <Image Include="coin.bmp" />
+    <Image Include="icon.ico" />
     <Image Include="orange.bmp" />
+    <Image Include="pacman_PNG15.png" />
     <Image Include="pinky.bmp" />
+    <Image Include="playerClosed.bmp" />
     <Image Include="playerDOWN.bmp" />
     <Image Include="playerLEFT.bmp" />
     <Image Include="playerRight.bmp" />
@@ -173,7 +177,7 @@
     <Image Include="superCoin.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Source.txt" />
+    <ResourceCompile Include="CourseWork.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

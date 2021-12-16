@@ -44,6 +44,8 @@ public:
 	void renderButton(HDC hdc);
 	void renderText();
 	void reloadMap() { 
+		switcher = 0;
+		int addition = -1;
 		DeleteObject(map.hdc);
 		createMap(); }
 	Sprite mapTraced, map, player, coin, superCoin, cherry, blue, red, pink, orange, scatter;
@@ -61,6 +63,9 @@ private:
 	HWND hWnd=0;
 	HINSTANCE hInstance=0;
 	int i = 0;
+	int switcher = 0;
+	int addition = -1;
 	Coords beforDirectionOfPlayer=directions::RIGHT;
+	Sprite plDOWN, plUP, plLEFT, plRIGHT,plCLOSED;
 };
 

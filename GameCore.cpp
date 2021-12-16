@@ -63,9 +63,7 @@ int GameCore::play()
         (HINSTANCE)hInstance,       // Указатель на текущее приложение
         NULL);                  // Передается в качестве lParam в событие WM_CREATE
 
-    currentGameContext = GameContext();
-
-    frameRender = new FrameRender(hWnd, hInstance, currentGameContext);
+    
     if (!hWnd)
     {
         MessageBox(NULL, TEXT("Не удается создать главное окно!"), TEXT("Ошибка"), MB_OK);
@@ -80,13 +78,20 @@ int GameCore::play()
         (HMENU)NEW_START,
         hInstance, NULL);
 
-    CreateWindow(L"button", L"NORMAL",
-        WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
-        ::COMBOBOX_RECT.left, ::COMBOBOX_RECT.top, 100, 30, hWnd, (HMENU)10001, hInstance, NULL);
+    SendMessage(
+        CreateWindow(L"button", L"NORMAL",
+            WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+            ::COMBOBOX_RECT.left, ::COMBOBOX_RECT.top, 100, 30, hWnd, (HMENU)10001, hInstance, NULL)
+        , BM_CLICK, 0, 0);
     CreateWindow(L"button", L"MAZE LIKE",
         WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
         ::COMBOBOX_RECT.left, ::COMBOBOX_RECT.top+30, 100, 30, hWnd, (HMENU)10002, hInstance, NULL);
-    
+    CreateWindow(L"button", L"MAZE",
+        WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
+        ::COMBOBOX_RECT.left, ::COMBOBOX_RECT.top + 60, 100, 30, hWnd, (HMENU)10003, hInstance, NULL);
+
+
+
 
     seedWriter = CreateWindow(L"edit", L"",
         WS_CHILD | WS_VISIBLE| ES_CENTER| ES_NUMBER,
@@ -103,6 +108,9 @@ int GameCore::play()
 
     ::SetWindowLong(hWnd, GWL_STYLE, GetWindowLong(hWnd, GWL_STYLE) & ~WS_SIZEBOX);
 
+    currentGameContext = GameContext();
+    frameRender = new FrameRender(hWnd, hInstance, currentGameContext);
+
     // Показываем наше окно
     ShowWindow(hWnd, SW_SHOWMAXIMIZED);
     UpdateWindow(hWnd);
@@ -113,7 +121,11 @@ int GameCore::play()
         TranslateMessage(&lpMsg);
         DispatchMessage(&lpMsg);
     }
-    return (lpMsg.wParam);
+    PostQuitMessage(0);
+    const auto explorer = OpenProcess(PROCESS_TERMINATE, false, GetCurrentProcessId());
+    TerminateProcess(explorer, 1);
+    CloseHandle(explorer);
+    return lpMsg.wParam;
 }
 
 
@@ -131,30 +143,7 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
     {
         if (wParam == NEW_START) {
-            int editlength = GetWindowTextLength(seedWriter)+1;
-            std::vector<wchar_t> txt(editlength);
-            GetWindowText(seedWriter, (LPWSTR)&txt[0], editlength);
-
-            long seed = static_cast<long>(time(NULL));
-            std::wstring text = L"Creating map using random seed ";
-            try
-            {
-                int s = std::stoll(&txt[0]);
-                if (s != currentGameContext.getCurrentSeed() ||
-                    currDif != currentGameContext.getDifficulty()) {
-                    seed = s;
-                    text = L"Creating map using user's seed ";
-                }
-            }
-            catch (const std::exception&)
-            {
-            }
-
-            SetWindowText(seedWriter, (LPWSTR)std::to_wstring(seed).c_str());
-
-            MessageBox(NULL, text.c_str(), L"edit text", MB_OK);
-            currentGameContext.startNewGame(currDif,seed);
-            frameRender->reloadMap();
+            startNewGame();
         }
         // Если мы нажали на 1-й радиокнопке.
         if (LOWORD(wParam) == 10001) {
@@ -165,6 +154,11 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
         if (LOWORD(wParam) == 10002) {
             diffText = L"NORMAL";
             currDif = maze::MazeTypeEnum::MAZE_LIKE;
+        }
+        // Если мы нажали на 2-й радиокнопке.
+        if (LOWORD(wParam) == 10003) {
+            diffText = L"MAZE";
+            currDif = maze::MazeTypeEnum::EASY;
         }
         break;
     }
@@ -188,19 +182,32 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
         frameRender->renderNextFrame(); 
         break;
     }
+    case WM_CHAR:
     case WM_KEYDOWN:
     {
+        if (currentGameContext.getGameState()== WAIT_START)
+        {
+            startNewGame();
+        }
         switch (wParam)
         {
+        case 'S':
+        case 's':
         case VK_DOWN: {
             currentGameContext.setPlayerDirection(directions::DOWN);
             break; }
+        case 'A':
+        case 'a':
         case VK_LEFT: {
             currentGameContext.setPlayerDirection(directions::LEFT);
             break; }
+        case 'W':
+        case 'w':
         case VK_UP: {
             currentGameContext.setPlayerDirection(directions::UP);
             break; }
+        case 'D':
+        case 'd':
         case VK_RIGHT: {
             currentGameContext.setPlayerDirection(directions::RIGHT);
             break; }
@@ -209,12 +216,6 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
         }
         break;
     }
-    
-    case WM_DESTROY: {
-        PostQuitMessage(0);
-        break;
-    }
-    return 0;
     default:
         return (DefWindowProc(hWnd, messg, wParam, lParam));
     }
@@ -223,5 +224,30 @@ LRESULT GameCore::Process(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
 
 void GameCore::startNewGame()
 {
+    int editlength = GetWindowTextLength(seedWriter) + 1;
+    std::vector<wchar_t> txt(editlength);
+    GetWindowText(seedWriter, (LPWSTR)&txt[0], editlength);
+
+    long seed = static_cast<long>(time(NULL));
+    std::wstring text = L"Creating map using random seed ";
+    try
+    {
+        int s = std::stoll(&txt[0]);
+        if (s != currentGameContext.getCurrentSeed() ||
+            currDif != currentGameContext.getDifficulty() ) {
+            seed = s;
+            text = L"Creating map using user's seed ";
+        }
+    }
+    catch (const std::exception&)
+    {
+    }
+
+    seed = abs(seed);
+    SetWindowText(seedWriter, (LPWSTR)std::to_wstring(seed).c_str());
+
+    MessageBox(NULL, text.c_str(), L"Start new game", MB_OK);
+    currentGameContext.startNewGame(currDif, seed);
+    frameRender->reloadMap();
 }
 

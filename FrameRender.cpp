@@ -149,7 +149,7 @@ void FrameRender::rednderPlayerInfo()
         DT_SINGLELINE
     );
 
-    text = std::to_wstring(currentGameContext.coinCount);
+    text = std::to_wstring(currentGameContext.level);
 
     rect = elementSize::LEVEL_COUNT_RECT;
     FillRect(mainDC, &rect, brush);
@@ -242,7 +242,7 @@ void FrameRender::renderText()
     );
 
     rect = elementSize::LEVEL_TEXT_RECT;
-    DrawText(mainDC, L"LEVELS", -1, &rect,
+    DrawText(mainDC, L"LEVEL", -1, &rect,
         DT_SINGLELINE
     );
 
@@ -253,9 +253,19 @@ void FrameRender::loadBMP() {
     
     HDC mainDC = GetDC(hWnd);
     
-    std::map<std::wstring, Sprite&> objDC{ {L"coin.bmp",coin},{L"superCoin.bmp",superCoin} ,{L"cherry.bmp",cherry} ,
-                                           {L"scatter.bmp",scatter},{L"red.bmp",red} ,{L"pinky.bmp",pink} ,
-                                           {L"orange.bmp",orange} ,{L"blue.bmp",blue} };
+    std::map<std::wstring, Sprite&> objDC{  {L"D:\\Projects\\C++\\CourseWork\\coin.bmp",coin},
+                                            {L"D:\\Projects\\C++\\CourseWork\\superCoin.bmp",superCoin} ,
+                                            {L"D:\\Projects\\C++\\CourseWork\\cherry.bmp",cherry} ,
+                                            {L"D:\\Projects\\C++\\CourseWork\\scatter.bmp",scatter},
+                                            {L"D:\\Projects\\C++\\CourseWork\\red.bmp",red} ,
+                                            {L"D:\\Projects\\C++\\CourseWork\\pinky.bmp",pink} ,
+                                            {L"D:\\Projects\\C++\\CourseWork\\orange.bmp",orange} ,
+                                            {L"D:\\Projects\\C++\\CourseWork\\blue.bmp",blue}, 
+                                            {L"D:\\Projects\\C++\\CourseWork\\playerUP.bmp",plUP} ,
+                                            {L"D:\\Projects\\C++\\CourseWork\\playerDOWN.bmp",plDOWN} , 
+                                            {L"D:\\Projects\\C++\\CourseWork\\playerRIGHT.bmp",plRIGHT} ,
+                                            {L"D:\\Projects\\C++\\CourseWork\\playerClosed.bmp",plCLOSED} ,
+                                            {L"D:\\Projects\\C++\\CourseWork\\playerLEFT.bmp",plLEFT} , };
 
     for (auto& kv : objDC) {
         HBITMAP hBmp = (HBITMAP)LoadImage(hInstance, kv.first.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
@@ -280,7 +290,6 @@ FrameRender::FrameRender(HWND _hWnd, HINSTANCE _hInstance,GameContext& _currentG
     hFont = CreateFont(33, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Stencil");
     loadBMP();
     createMap();
-
     renderText();
 }
 
@@ -288,46 +297,38 @@ FrameRender::~FrameRender()
 {
 }
 
-
 void FrameRender::renderPlayer()
 {
     if (currentGameContext.player.isInGame) {
-        HBITMAP hBmp = (HBITMAP)LoadImage(hInstance, L"playerDOWN.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);;
+        Sprite* sp = &plCLOSED;
         Coords dir = currentGameContext.player.getDirection();
         beforDirectionOfPlayer=dir = dir == directions::STILL ? beforDirectionOfPlayer : dir;
-        if (dir == directions::DOWN) {
-            hBmp = (HBITMAP)LoadImage(hInstance, L"playerDOWN.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+        
+        switcher %= 8;
+        addition = switcher == 0 ? -addition : addition;
+        switcher += addition;
+        
+        if (switcher>=0 || currentGameContext.player.getDirection()== directions::STILL) {
+            if (dir == directions::DOWN) {
+                sp = &plDOWN;
+            }
+            else if (dir == directions::UP) {
+                sp = &plUP;
+            }
+            else if (dir == directions::RIGHT) {
+                sp = &plRIGHT;
+            }
+            else if (dir == directions::LEFT) {
+                sp = &plLEFT;
+            }
         }
-        else if(dir == directions::UP) {
-            hBmp = (HBITMAP)LoadImage(hInstance, L"playerUP.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
-        }
-        else if (dir == directions::RIGHT) {
-            hBmp = (HBITMAP)LoadImage(hInstance, L"playerRIGHT.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-
-        }
-        else if (dir == directions::LEFT) {
-            hBmp = (HBITMAP)LoadImage(hInstance, L"playerLEFT.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-        }
-         
-        if (hBmp != NULL) {
-            BITMAP bm;
-            GetObject(hBmp, sizeof(bm), &bm);
-
-            player.set(CreateCompatibleDC(mapTraced.hdc), bm.bmWidth, bm.bmHeight);
-            SelectObject(player.hdc, hBmp);
-            DeleteObject(hBmp);
-        }
-        else {
-            MessageBox(NULL, TEXT("Starting new game!"), TEXT("New game"), MB_OK);
-        }
         Coords tile = currentGameContext.player.getCurrentTile()*TILE_SIZE;
         Coords offset = currentGameContext.player.getOffset() * (TILE_SIZE / 100.0);
-        int x1 = tile.x +offset.x + TILE_CENTER - player.width / 2,
-            y1 = tile.y + offset.y + TILE_CENTER - player.height / 2;
-        TransparentBlt(mapTraced.hdc, x1, y1, player.width, player.height, player.hdc, 0, 0, player.width, player.height, frameContext::BLACK_COLOR);
-
-        DeleteObject(player.hdc);
+        int x1 = tile.x +offset.x + TILE_CENTER - sp->width / 2,
+            y1 = tile.y + offset.y + TILE_CENTER - sp->height / 2;
+        TransparentBlt(mapTraced.hdc, x1, y1, sp->width, sp->height, sp->hdc, 
+            0, 0, sp->width, sp->height, frameContext::BLACK_COLOR);
     }
 }
 
@@ -394,8 +395,8 @@ bool FrameRender::renderNextFrame()
         BitBlt(mapTraced.hdc, x, y, cherry.width, cherry.height,
             cherry.hdc, 0, 0, SRCCOPY);
     }
-    renderEnemies();
     renderPlayer();
+    renderEnemies();
 
     BitBlt(mainDC, frameContext::BORDER_LEFT, 0, map.width, map.height,
         mapTraced.hdc, 0, 0, SRCCOPY);

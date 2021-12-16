@@ -19,7 +19,7 @@ namespace maze {
 
 	enum MazeTypeEnum
 	{
-		MAZE_LIKE=4,NORMAL=1
+		MAZE_LIKE = 3, NORMAL = 1, EASY = 1000000
 	};
 
 	struct MazeContext

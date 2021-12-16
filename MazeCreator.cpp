@@ -193,9 +193,8 @@ TwoDimArr maze::MazeCreator::generateMap(MazeContext context)
 	maze = TwoDimArr(mazeRows + 1, std::vector<int>(mazeColums + 1));
 	if (context.seed != 0) {
 		srand(context.seed);
-		int r = rand() % mazeRows % 2 * 2 + 1;
-		int c = rand() % mazeColums % 2 * 2 + 1;
-		maze[r][c] = 0;
+		int r = rand() % mazeRows / 2 * 2 + 1;
+		int c = rand() % mazeColums / 2 * 2 + 1;
 		//?Allocate the maze with recursive method
 		goInAllDirections(Cell{ r,c });
 		deleteDeadEnds();
